@@ -9,7 +9,7 @@ public interface UserLoginRegisterMapper {
 	 * @param username
 	 * @return
 	 */
-	public MyUser getUserByUsername(String username) throws Exception;
+	public MyUser getUserByUsername(String accout) throws Exception;
 	
 	/**
 	 * 注册用户将用户保存到数据库中  使用于注册
@@ -18,5 +18,9 @@ public interface UserLoginRegisterMapper {
 	 * @throws Exception
 	 */
 	public long saveUser(MyUser user) throws Exception;
+	
+	public void deleteUser(String accout) throws Exception;
+	
+	public void editUser(MyUser user,String accout) throws Exception;
 	
 }

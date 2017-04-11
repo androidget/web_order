@@ -2,11 +2,16 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.study.mapper.ItemCustomerMapper">
+<mapper namespace="com.study.mapper.UserLoginRegisterMapper">
+
+
+
+	<insert id="saveUser" parameterType=""></insert>
+
 
 	<!-- 定义sql片段，也就是查询条件 -->
 	<sql id="query_items_where">
-	<!-- 使用包装对象进行拼接  -->
+		<!-- 使用包装对象进行拼接 -->
 		<if test="itemsCustom!=null">
 			<if test="itemsCustom.name!=null and itemsCustom.name!='' ">
 				`items`.name like '%${itemsCustom.name}%'
@@ -23,13 +28,16 @@
 		</where>
 
 	</select>
-	
-	<select id="findItmeByid" parameterType="java.lang.Integer" resultType="ItemsCustom">
-			select * from `items` where `id`=#{id}
+
+
+	<select id="findItmeByid" parameterType="java.lang.Integer"
+		resultType="ItemsCustom">
+		select * from `items` where `id`=#{id}
 	</select>
-	
+
 	<update id="updateItem" parameterType="ItemsCustom">
-			update `items` set `name`=#{name}, `price`=#{price}, `detail`=#{detail},`createtime`=#{createtime} where id=#{id};
+		update `items` set `name`=#{name}, `price`=#{price},
+		`detail`=#{detail},`createtime`=#{createtime} where id=#{id};
 	</update>
 
 </mapper> 
