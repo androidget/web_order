@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.ItemCustomerMapper">
+
+	<!-- 定义sql片段，也就是查询条件 -->
+	<sql id="query_items_where">
+	<!-- 使用包装对象进行拼接  -->
+		<if test="itemsCustom!=null">
+			<if test="itemsCustom.name!=null and itemsCustom.name!='' ">
+				`items`.name like '%${itemsCustom.name}%'
+			</if>
+		</if>
+	</sql>
+
+	<!-- #是占位符，id可以是value -->
+	<select id="findItemsList" parameterType="com.study.po.ItemsqueryVo"
+		resultType="com.study.po.ItemsCustom">
+		select * from `items`
+		<where>
+			<include refid="query_items_where"></include>
+		</where>
+
+	</select>
+	
+	<select id="findItmeByid" parameterType="java.lang.Integer" resultType="ItemsCustom">
+			select * from `items` where `id`=#{id}
+	</select>
+	
+	<update id="updateItem" parameterType="ItemsCustom">
+			update `items` set `name`=#{name}, `price`=#{price}, `detail`=#{detail},`createtime`=#{createtime} where id=#{id};
+	</update>
+
+</mapper> 
+ 

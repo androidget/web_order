@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 看情况配置setting  -->
+
+	<!--配置别名 -->
+
+	<typeAliases>
+		<!-- <typeAlias type="com.self.User" alias="user"/> 可以配置多包扫描 -->
+		<package name="com.study.po" />
+	</typeAliases>
+
+	<!-- <mappers> 单个映射文件的加载 使用spring mybatis 整合包 不需要配置 两者的mapper.java mapper.xml 
+		同名在用一个位置 <mapper resource="mapper/User.xml" /> 批量处理mapper映射文件 <package name="com.mapper"/> 
+		</mappers> -->
+</configuration>

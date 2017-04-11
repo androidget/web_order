@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+
+	<!-- 处理器适配器 这个是个非注解的适配器 看源码可知如何写handler -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"></bean> 
+		<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean> -->
+	<!-- 配置视图解析器 解析jsp页面 默认 jstf 需要jstf jar 包 -->
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+
+	<!-- 适配器 注解配置 3.1后面的 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"></bean> 
+		映射器 <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"></bean> -->
+
+	<!-- 使用 mvc:annotation-driven代替上边注解映射器和注解适配器配置 mvc:annotation-driven默认加载很多的参数绑定方法， 
+		比如json转换解析器就默认加载了，如果使用mvc:annotation-driven不用配置上边的RequestMappingHandlerMapping和RequestMappingHandlerAdapter 
+		实际开发时使用mvc:annotation-driven -->
+	<mvc:annotation-driven conversion-service="conversionService"
+		validator="validator">
+	</mvc:annotation-driven>
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+		<!-- 表示所有url和子url -->
+			<mvc:mapping path="/**"/>
+			<bean class="com.study.exceptionResolver.HandlerIntercepter1"></bean>
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+		<!-- 表示所有url和子url -->
+			<mvc:mapping path="/**"/>
+			<bean class="com.study.exceptionResolver.LoginIntercepter"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+<!-- 	<mvc:resources mapping="/resources/**/" location="/resources/" /> -->
+
+	<!-- 静态资源访问   3.0之后建议使用这个  取静态资源   -->
+	<mvc:default-servlet-handler/>
+
+	<!-- 校验器 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<!-- hibernate校验器 -->
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<!-- 指定校验使用的资源文件，在文件中配置校验错误信息，如果不指定则默认使用classpath下的ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+	<!-- 校验错误信息配置文件 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 资源文件名 -->
+		<property name="basenames">
+			<list>
+				<value>classpath:errorMessage</value>
+			</list>
+		</property>
+		<!-- 资源文件编码格式 -->
+		<property name="fileEncodings" value="utf-8" />
+		<!-- 对资源文件内容缓存时间，单位秒 -->
+		<property name="cacheSeconds" value="120" />
+	</bean>
+
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为5MB -->
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+
+	<bean id="conversionService"
+		class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<!-- 写转换器 -->
+		<property name="converters">
+			<list>
+				<!-- 日期转换器 -->
+				<bean class="com.study.converter.CustomerDateConverter"></bean>
+			</list>
+		</property>
+
+	</bean>
+
+	<!-- 对于注解的Handler可以单个配置 实际开发中建议使用组件扫描 -->
+	<!-- 可以扫描controller、service、... <bean class="com.study.controller.ItemController3" 
+		></bean> 这里让扫描controller，指定controller的包 -->
+	<context:component-scan base-package="com.study.controller"></context:component-scan>
+
+	<bean class="com.study.exceptionResolver.MyExceptionResolver"></bean>
+
+</beans> 
