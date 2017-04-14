@@ -4,10 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.study.mapper.UserLoginRegisterMapper">
 
-
-
-	<insert id="saveUser" parameterType=""></insert>
-
+	<insert id="saveUser" parameterType="com.study.po.MyUser">
+		INSERT INTO `users` (`account`,`username`,`password`,`status`,`id`,`signintime`) value (#{account},#{username},#{password},#{status},#{id},#{signintime})
+	</insert>
 
 	<!-- 定义sql片段，也就是查询条件 -->
 	<sql id="query_items_where">
